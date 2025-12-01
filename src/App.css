@@ -1,0 +1,56 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+}
+
+.app-layout {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  min-height: calc(100vh - var(--header-height));
+  transition: margin-left var(--transition-base);
+}
+
+/* Placeholder Pages */
+.placeholder-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3xl);
+  text-align: center;
+}
+
+.placeholder-page h1 {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--space-md);
+}
+
+.placeholder-page p {
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+}
+
+/* Desktop: Sidebar always visible */
+@media (min-width: 1025px) {
+  .main-content {
+    margin-left: var(--sidebar-width);
+  }
+}
+
+/* Tablet and Mobile: Sidebar as drawer */
+@media (max-width: 1024px) {
+  .main-content {
+    margin-left: 0;
+  }
+}

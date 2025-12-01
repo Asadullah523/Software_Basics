@@ -1,0 +1,238 @@
+.dashboard {
+    padding: var(--space-4xl) var(--space-2xl);
+    /* Increased padding */
+    width: 95%;
+    max-width: 2400px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: var(--space-4xl);
+    /* Increased margin */
+}
+
+.dashboard-header h1 {
+    font-size: 3.5rem;
+    /* Increased from 3xl */
+    margin-bottom: var(--space-md);
+    font-weight: 800;
+}
+
+.dashboard-header p {
+    font-size: 1.5rem;
+    /* Increased from lg */
+    color: var(--text-secondary);
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* Wider cards */
+    gap: var(--space-xl);
+    /* Increased gap */
+    margin-bottom: var(--space-4xl);
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xl);
+    padding: var(--space-2xl);
+    /* Larger padding */
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    /* Larger radius */
+    transition: all var(--transition-base);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-lg);
+}
+
+.stat-icon {
+    width: 80px;
+    /* Larger icon box */
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-xl);
+    font-size: 2.5rem;
+    /* Larger icon */
+}
+
+.stat-icon.overall {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-600);
+}
+
+.stat-icon.completed {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.stat-icon.xp {
+    background: rgba(251, 191, 36, 0.1);
+    font-size: 3rem;
+    /* Even larger for XP */
+}
+
+.stat-icon.quizzes {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--accent-600);
+}
+
+.stat-info {
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 3rem;
+    /* Much larger value */
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 1.2rem;
+    /* Larger label */
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Sections */
+.sections-container h2 {
+    font-size: 2.5rem;
+    /* Larger section header */
+    margin-bottom: var(--space-2xl);
+    font-weight: 800;
+}
+
+.sections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    /* Wider section cards */
+    gap: var(--space-2xl);
+}
+
+.section-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--space-3xl);
+    /* Much larger padding */
+    transition: all var(--transition-base);
+}
+
+.section-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--card-shadow-lg);
+    border-color: var(--primary-600);
+}
+
+.section-card-header {
+    display: flex;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+.section-card-icon {
+    font-size: 3.5rem;
+    /* Larger icon */
+    flex-shrink: 0;
+}
+
+.section-card-title h3 {
+    font-size: 1.8rem;
+    /* Larger title */
+    margin-bottom: var(--space-xs);
+    font-weight: 700;
+}
+
+.section-card-title p {
+    font-size: 1.1rem;
+    /* Larger description */
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.section-card-meta {
+    display: flex;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 1.1rem;
+    /* Larger meta text */
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.progress-container {
+    margin-bottom: var(--space-xl);
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    /* Larger progress text */
+    margin-bottom: var(--space-sm);
+    font-weight: 600;
+}
+
+.progress-percentage {
+    font-weight: 800;
+    color: var(--primary-600);
+}
+
+.section-card-btn {
+    display: block;
+    width: 100%;
+    padding: var(--space-xl);
+    /* Larger button padding */
+    text-align: center;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    font-weight: 700;
+    transition: all var(--transition-fast);
+    font-size: 1.3rem;
+    /* Larger button text */
+}
+
+.section-card-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard {
+        padding: var(--space-xl) var(--space-md);
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sections-grid {
+        grid-template-columns: 1fr;
+    }
+}
