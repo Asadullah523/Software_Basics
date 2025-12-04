@@ -48,9 +48,7 @@
     gap: var(--space-sm);
     text-decoration: none;
     font-weight: 700;
-    /* Reduced weight */
-    font-size: var(--font-size-xl);
-    /* Reduced from 1.8rem */
+    font-size: var(--font-size-lg);
     color: var(--text-primary);
     transition: transform var(--transition-fast);
 }
@@ -60,8 +58,7 @@
 }
 
 .logo-icon {
-    font-size: 1.6rem;
-    /* Reduced icon */
+    font-size: 1.4rem;
 }
 
 .logo-text {
@@ -82,13 +79,11 @@
     color: var(--text-secondary);
     text-decoration: none;
     font-weight: 600;
-    /* Reduced weight */
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-xs) var(--space-md);
     border-radius: var(--radius-md);
     transition: all var(--transition-fast);
     position: relative;
-    font-size: var(--font-size-base);
-    /* Reduced */
+    font-size: var(--font-size-sm);
 }
 
 .nav-link::after {
@@ -148,7 +143,7 @@
 }
 
 .xp-icon {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .theme-toggle {
@@ -160,8 +155,8 @@
     color: var(--text-primary);
     cursor: pointer;
     padding: var(--space-sm);
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--radius-full);
     transition: all var(--transition-fast);
 }
@@ -179,8 +174,8 @@
     background: var(--bg-tertiary);
     color: var(--text-primary);
     padding: var(--space-sm);
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--radius-full);
     transition: all var(--transition-fast);
 }

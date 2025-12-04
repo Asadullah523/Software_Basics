@@ -1,51 +1,42 @@
 .dashboard {
-    padding: var(--space-xl) var(--space-lg);
-    /* Reduced for compact layout */
+    padding: var(--space-lg) var(--space-md);
     width: 95%;
     max-width: 1400px;
-    /* More reasonable max width */
     margin: 0 auto;
 }
 
 .dashboard-header {
     text-align: center;
-    margin-bottom: var(--space-2xl);
-    /* Reduced margin */
+    margin-bottom: var(--space-xl);
 }
 
 .dashboard-header h1 {
-    font-size: var(--font-size-3xl);
-    /* Reduced from 3.5rem */
+    font-size: var(--font-size-2xl);
     margin-bottom: var(--space-xs);
     font-weight: 700;
 }
 
 .dashboard-header p {
-    font-size: var(--font-size-base);
-    /* Reduced from 1.5rem */
+    font-size: var(--font-size-sm);
     color: var(--text-secondary);
 }
 
 /* Stats Grid */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    /* Narrower cards */
-    gap: var(--space-md);
-    /* Reduced gap */
-    margin-bottom: var(--space-2xl);
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xl);
 }
 
 .stat-card {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
-    padding: var(--space-lg);
-    /* Reduced padding */
+    gap: var(--space-sm);
+    padding: var(--space-md);
     background: var(--card-bg);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    /* Standard radius */
+    border-radius: var(--radius-md);
     transition: all var(--transition-base);
 }
 
@@ -55,15 +46,13 @@
 }
 
 .stat-icon {
-    width: 50px;
-    /* Smaller icon box */
-    height: 50px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: var(--radius-md);
-    font-size: 1.5rem;
-    /* Smaller icon */
+    font-size: 1.3rem;
 }
 
 .stat-icon.overall {
@@ -78,8 +67,7 @@
 
 .stat-icon.xp {
     background: rgba(251, 191, 36, 0.1);
-    font-size: 1.8rem;
-    /* Slightly larger for XP */
+    font-size: 1.5rem;
 }
 
 .stat-icon.quizzes {
@@ -92,8 +80,7 @@
 }
 
 .stat-value {
-    font-size: var(--font-size-3xl);
-    /* Reduced from 3rem */
+    font-size: var(--font-size-2xl);
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 0;
@@ -101,8 +88,7 @@
 }
 
 .stat-label {
-    font-size: var(--font-size-xs);
-    /* Smaller label */
+    font-size: 0.65rem;
     color: var(--text-secondary);
     font-weight: 600;
     text-transform: uppercase;
@@ -111,25 +97,22 @@
 
 /* Sections */
 .sections-container h2 {
-    font-size: var(--font-size-2xl);
-    /* Reduced section header */
-    margin-bottom: var(--space-xl);
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-lg);
     font-weight: 700;
 }
 
 .sections-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    /* More compact section cards */
-    gap: var(--space-lg);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-md);
 }
 
 .section-card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg);
-    /* Reduced padding */
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
     transition: all var(--transition-base);
 }
 
@@ -141,26 +124,23 @@
 
 .section-card-header {
     display: flex;
-    gap: var(--space-md);
-    margin-bottom: var(--space-md);
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
 }
 
 .section-card-icon {
-    font-size: 2.5rem;
-    /* Reduced icon */
+    font-size: 1.8rem;
     flex-shrink: 0;
 }
 
 .section-card-title h3 {
-    font-size: var(--font-size-lg);
-    /* Reduced title */
+    font-size: var(--font-size-base);
     margin-bottom: var(--space-xs);
     font-weight: 700;
 }
 
 .section-card-title p {
-    font-size: var(--font-size-sm);
-    /* Reduced description */
+    font-size: var(--font-size-xs);
     color: var(--text-secondary);
     margin: 0;
     line-height: 1.4;
@@ -168,9 +148,9 @@
 
 .section-card-meta {
     display: flex;
-    gap: var(--space-md);
-    margin-bottom: var(--space-md);
-    padding-bottom: var(--space-md);
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    padding-bottom: var(--space-sm);
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -178,21 +158,19 @@
     display: flex;
     align-items: center;
     gap: var(--space-xs);
-    font-size: var(--font-size-xs);
-    /* Reduced meta text */
+    font-size: 0.65rem;
     color: var(--text-secondary);
     font-weight: 500;
 }
 
 .progress-container {
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-sm);
 }
 
 .progress-info {
     display: flex;
     justify-content: space-between;
-    font-size: var(--font-size-xs);
-    /* Reduced progress text */
+    font-size: 0.65rem;
     margin-bottom: var(--space-xs);
     font-weight: 600;
 }
@@ -205,8 +183,7 @@
 .section-card-btn {
     display: block;
     width: 100%;
-    padding: var(--space-md);
-    /* Reduced button padding */
+    padding: var(--space-sm) var(--space-md);
     text-align: center;
     background: var(--gradient-primary);
     color: white;
@@ -214,8 +191,7 @@
     text-decoration: none;
     font-weight: 600;
     transition: all var(--transition-fast);
-    font-size: var(--font-size-sm);
-    /* Reduced button text */
+    font-size: var(--font-size-xs);
 }
 
 .section-card-btn:hover {
@@ -226,7 +202,7 @@
 /* Responsive */
 @media (max-width: 768px) {
     .dashboard {
-        padding: var(--space-xl) var(--space-md);
+        padding: var(--space-lg) var(--space-sm);
     }
 
     .stats-grid {
