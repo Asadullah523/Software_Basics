@@ -1,0 +1,117 @@
+.bookmarks-page {
+    padding: var(--space-xl) var(--space-lg);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.bookmarks-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+}
+
+.bookmarks-header h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-xs);
+}
+
+.bookmarks-header p {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+/* Empty State */
+.empty-bookmarks {
+    text-align: center;
+    padding: var(--space-3xl) var(--space-xl);
+}
+
+.empty-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--space-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    font-size: 2rem;
+    color: var(--text-tertiary);
+}
+
+.empty-bookmarks h2 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-sm);
+}
+
+.empty-bookmarks p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xl);
+}
+
+/* Bookmarks Grid */
+.bookmarks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-md);
+}
+
+.bookmark-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    text-decoration: none;
+    transition: all var(--transition-base);
+}
+
+.bookmark-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow-lg);
+    border-color: var(--primary-600);
+}
+
+.bookmark-section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.bookmark-card h3 {
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+    font-weight: 700;
+}
+
+.bookmark-card-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--font-size-xs);
+    color: var(--primary-600);
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .bookmarks-page {
+        padding: var(--space-lg) var(--space-sm);
+    }
+
+    .bookmarks-grid {
+        grid-template-columns: 1fr;
+    }
+}

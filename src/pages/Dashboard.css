@@ -21,6 +21,11 @@
     color: var(--text-secondary);
 }
 
+/* Streak Container */
+.streak-container {
+    margin-bottom: var(--space-xl);
+}
+
 /* Stats Grid */
 .stats-grid {
     display: grid;

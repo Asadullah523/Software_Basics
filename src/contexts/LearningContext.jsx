@@ -18,8 +18,10 @@ export const LearningProvider = ({ children }) => {
       completedLessons: [],
       quizScores: {},
       totalXP: 0,
-      streak: 0,
+      currentStreak: 0,
+      longestStreak: 0,
       lastVisit: null,
+      bookmarkedLessons: [],
       sectionProgress: {}
     };
   });
@@ -39,6 +41,38 @@ export const LearningProvider = ({ children }) => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  // Calculate and update streak on mount
+  useEffect(() => {
+    updateStreak();
+  }, []);
+
+  // Calculate streak based on last visit
+  const updateStreak = () => {
+    setProgress(prev => {
+      if (!prev.lastVisit) return prev;
+
+      const now = new Date();
+      const lastVisit = new Date(prev.lastVisit);
+      const hoursDiff = (now - lastVisit) / (1000 * 60 * 60);
+
+      // If visited within 24 hours, maintain streak
+      if (hoursDiff <= 24) {
+        return prev;
+      }
+      // If visited within 48 hours, it's been one day
+      else if (hoursDiff <= 48) {
+        return prev;
+      }
+      // If gap is more than 48 hours, reset streak
+      else {
+        return {
+          ...prev,
+          currentStreak: 0
+        };
+      }
+    });
+  };
 
   // Toggle theme
   const toggleTheme = () => {
@@ -68,11 +102,42 @@ export const LearningProvider = ({ children }) => {
           total: section.topics.length
         };
       });
+
+      // Calculate streak
+      const now = new Date();
+      const lastVisit = prev.lastVisit ? new Date(prev.lastVisit) : null;
+      let newStreak = prev.currentStreak || 0;
+      let newLongestStreak = prev.longestStreak || 0;
+
+      if (lastVisit) {
+        const hoursSinceLastVisit = (now - lastVisit) / (1000 * 60 * 60);
+        const daysSinceLastVisit = Math.floor(hoursSinceLastVisit / 24);
+
+        // If it's been less than 24 hours, same day - no change
+        // If it's been 24-48 hours, it's the next day - increment
+        if (hoursSinceLastVisit > 24 && hoursSinceLastVisit <= 48) {
+          newStreak += 1;
+        }
+        // If gap is more than 48 hours, reset streak
+        else if (hoursSinceLastVisit > 48) {
+          newStreak = 1;
+        }
+      } else {
+        // First lesson ever
+        newStreak = 1;
+      }
+
+      // Update longest streak if current is higher
+      if (newStreak > newLongestStreak) {
+        newLongestStreak = newStreak;
+      }
       
       return {
         ...prev,
         completedLessons: newCompletedLessons,
         totalXP: prev.totalXP + xpEarned,
+        currentStreak: newStreak,
+        longestStreak: newLongestStreak,
         lastVisit: new Date().toISOString(),
         sectionProgress: newSectionProgress
       };
@@ -124,14 +189,41 @@ export const LearningProvider = ({ children }) => {
     return Math.round((totalCompleted / totalLessons) * 100);
   };
 
+  // Get current streak
+  const getCurrentStreak = () => {
+    return progress.currentStreak || 0;
+  };
+
+  // Get longest streak
+  const getLongestStreak = () => {
+    return progress.longestStreak || 0;
+  };
+
+  // Toggle bookmark
+  const toggleBookmark = (lessonId) => {
+    setProgress(prev => ({
+      ...prev,
+      bookmarkedLessons: prev.bookmarkedLessons.includes(lessonId)
+        ? prev.bookmarkedLessons.filter(id => id !== lessonId)
+        : [...prev.bookmarkedLessons, lessonId]
+    }));
+  };
+
+  // Check if lesson is bookmarked
+  const isLessonBookmarked = (lessonId) => {
+    return progress.bookmarkedLessons?.includes(lessonId) || false;
+  };
+
   // Reset all progress
   const resetProgress = () => {
     setProgress({
       completedLessons: [],
       quizScores: {},
       totalXP: 0,
-      streak: 0,
+      currentStreak: 0,
+      longestStreak: 0,
       lastVisit: null,
+      bookmarkedLessons: [],
       sectionProgress: {}
     });
   };
@@ -146,6 +238,10 @@ export const LearningProvider = ({ children }) => {
     isLessonCompleted,
     getSectionProgress,
     getOverallProgress,
+    getCurrentStreak,
+    getLongestStreak,
+    toggleBookmark,
+    isLessonBookmarked,
     resetProgress
   };
 

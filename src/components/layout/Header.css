@@ -114,14 +114,19 @@
     gap: var(--space-md);
 }
 
+.header-search {
+    width: 250px;
+    margin-right: var(--space-sm);
+}
+
 .header-progress {
     display: flex;
     align-items: center;
     gap: var(--space-xs);
-    padding: var(--space-sm) var(--space-md);
-    background: var(--bg-tertiary);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--bg-secondary);
     border-radius: var(--radius-full);
-    color: var(--text-secondary);
+    color: var(--primary-600);
     font-weight: 600;
     font-size: var(--font-size-sm);
 }

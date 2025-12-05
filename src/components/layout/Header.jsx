@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { FiSun, FiMoon, FiMenu, FiX, FiUser, FiTrendingUp, FiCode } from 'react-icons/fi';
 import { useLearning } from '../../contexts/LearningContext';
+import SearchBar from '../common/SearchBar';
 import './Header.css';
 
 const Header = ({ onToggleSidebar }) => {
@@ -36,6 +37,11 @@ const Header = ({ onToggleSidebar }) => {
 
         {/* Right Section */}
         <div className="header-right">
+          {/* Search Bar */}
+          <div className="header-search">
+            <SearchBar />
+          </div>
+
           {/* Progress Indicator */}
           <div className="header-progress">
             <FiTrendingUp size={18} />

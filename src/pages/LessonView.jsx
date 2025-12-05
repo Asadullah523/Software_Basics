@@ -4,6 +4,7 @@ import { FiChevronLeft, FiChevronRight, FiCheckCircle, FiBook } from 'react-icon
 import { useLearning } from '../contexts/LearningContext';
 import curriculum from '../data/curriculum';
 import Quiz from '../components/learning/Quiz';
+import BookmarkButton from '../components/common/BookmarkButton';
 import './LessonView.css';
 
 const LessonView = () => {
@@ -76,7 +77,10 @@ const LessonView = () => {
                 </span>
               )}
             </div>
-            <h1 className="lesson-title">{topic.title}</h1>
+            <div className="lesson-title-row">
+              <h1 className="lesson-title">{topic.title}</h1>
+              <BookmarkButton lessonId={topicId} />
+            </div>
           </header>
 
           {/* Main Content */}

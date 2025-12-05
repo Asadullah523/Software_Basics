@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { FiBook, FiClock, FiCheckCircle, FiTrendingUp } from 'react-icons/fi';
 import { useLearning } from '../contexts/LearningContext';
 import curriculum from '../data/curriculum';
+import StudyStreak from '../components/learning/StudyStreak';
+import CircularProgress from '../components/common/CircularProgress';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -20,16 +22,20 @@ const Dashboard = () => {
         <p>Track your progress and continue your journey</p>
       </div>
 
+      {/* Study Streak - Prominent Feature */}
+      <div className="streak-container">
+        <StudyStreak />
+      </div>
+
       {/* Stats Cards */}
       <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon overall">
-            <FiTrendingUp />
-          </div>
-          <div className="stat-info">
-            <div className="stat-value">{overallProgress}%</div>
-            <div className="stat-label">Overall Progress</div>
-          </div>
+        <div className="stat-card progress-card">
+          <CircularProgress 
+            value={overallProgress} 
+            size={80} 
+            strokeWidth={8} 
+            label="Overall"
+          />
         </div>
 
 <div className="stat-card">

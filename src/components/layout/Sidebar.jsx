@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import { FiHome, FiLayout, FiBook, FiCheckCircle } from 'react-icons/fi';
+import { FiHome, FiLayout, FiBook, FiCheckCircle, FiBookmark } from 'react-icons/fi';
 import { useLearning } from '../../contexts/LearningContext';
 import curriculum from '../../data/curriculum';
 import './Sidebar.css';
@@ -29,6 +29,9 @@ const Sidebar = ({ isOpen, onClose }) => {
             </Link>
             <Link to="/dashboard" className={`sidebar-link ${location.pathname === '/dashboard' ? 'active' : ''}`}>
               <FiLayout /> Dashboard
+            </Link>
+            <Link to="/bookmarks" className={`sidebar-link ${location.pathname === '/bookmarks' ? 'active' : ''}`}>
+              <FiBookmark /> Bookmarks
             </Link>
             <Link to="/roadmap" className={`sidebar-link ${location.pathname === '/roadmap' ? 'active' : ''}`}>
               <FiBook /> Roadmap

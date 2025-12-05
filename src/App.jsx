@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Roadmap from './pages/Roadmap';
 import LessonView from './pages/LessonView';
 import Profile from './pages/Profile';
+import Bookmarks from './pages/Bookmarks';
 import './App.css';
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/roadmap" element={<Roadmap />} />
+                <Route path="/bookmarks" element={<Bookmarks />} />
                 <Route path="/learn/:sectionId/:topicId" element={<LessonView />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/about" element={<div className="placeholder-page"><h1>About Us</h1><p>Learn more about CodeFoundations</p></div>} />
