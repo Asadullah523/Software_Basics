@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FiCheckCircle, FiXCircle, FiRefreshCw } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLearning } from '../../contexts/LearningContext';
 import './Quiz.css';
 
@@ -73,11 +74,21 @@ const Quiz = ({ questions, topicId, onComplete, onQuizPass }) => {
     const passed = percentage >= 70;
 
     return (
-      <div className="quiz-results">
+      <motion.div 
+        className="quiz-results"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className={`results-card ${passed ? 'passed' : 'failed'}`}>
-          <div className="results-icon">
+          <motion.div 
+            className="results-icon"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
+          >
             {passed ? <FiCheckCircle size={64} /> : <FiXCircle size={64} />}
-          </div>
+          </motion.div>
           <h2>{passed ? 'Congratulations!' : 'Keep Learning!'}</h2>
           <p className="results-message">
             {passed 
@@ -101,7 +112,7 @@ const Quiz = ({ questions, topicId, onComplete, onQuizPass }) => {
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
@@ -112,72 +123,88 @@ const Quiz = ({ questions, topicId, onComplete, onQuizPass }) => {
         <div className="quiz-progress">
           <span>Question {currentQuestion + 1} of {questions.length}</span>
           <div className="progress-bar">
-            <div 
+            <motion.div 
               className="progress-fill" 
-              style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+              initial={{ width: 0 }}
+              animate={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+              transition={{ duration: 0.5 }}
             />
           </div>
         </div>
       </div>
 
-      <div className="quiz-question">
-        <h3>{question.question}</h3>
-        
-        <div className="quiz-options">
-          {question.options.map((option, index) => (
-            <button
-              key={index}
-              className={`quiz-option ${
-                selectedAnswer === index ? 'selected' : ''
-              } ${
-                showExplanation
-                  ? index === question.correct
-                    ? 'correct'
-                    : selectedAnswer === index
-                    ? 'incorrect'
+      <AnimatePresence mode="wait">
+        <motion.div 
+          key={currentQuestion}
+          className="quiz-question"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          <h3>{question.question}</h3>
+          
+          <div className="quiz-options">
+            {question.options.map((option, index) => (
+              <button
+                key={index}
+                className={`quiz-option ${
+                  selectedAnswer === index ? 'selected' : ''
+                } ${
+                  showExplanation
+                    ? index === question.correct
+                      ? 'correct'
+                      : selectedAnswer === index
+                      ? 'incorrect'
+                      : ''
                     : ''
-                  : ''
-              }`}
-              onClick={() => handleAnswerSelect(index)}
-              disabled={showExplanation}
-            >
-              <span className="option-letter">{String.fromCharCode(65 + index)}</span>
-              <span className="option-text">{option}</span>
-              {showExplanation && index === question.correct && (
-                <FiCheckCircle className="option-icon correct-icon" />
-              )}
-              {showExplanation && selectedAnswer === index && index !== question.correct && (
-                <FiXCircle className="option-icon incorrect-icon" />
-              )}
-            </button>
-          ))}
-        </div>
-
-        {showExplanation && question.explanation && (
-          <div className={`explanation ${selectedAnswer === question.correct ? 'correct-exp' : 'incorrect-exp'}`}>
-            <strong>
-              {selectedAnswer === question.correct ? '✅ Correct!' : '❌ Incorrect'}
-            </strong>
-            <p>{question.explanation}</p>
+                }`}
+                onClick={() => handleAnswerSelect(index)}
+                disabled={showExplanation}
+              >
+                <span className="option-letter">{String.fromCharCode(65 + index)}</span>
+                <span className="option-text">{option}</span>
+                {showExplanation && index === question.correct && (
+                  <FiCheckCircle className="option-icon correct-icon" />
+                )}
+                {showExplanation && selectedAnswer === index && index !== question.correct && (
+                  <FiXCircle className="option-icon incorrect-icon" />
+                )}
+              </button>
+            ))}
           </div>
-        )}
 
-        <div className="quiz-actions">
-          {!showExplanation ? (
-            <button 
-              className="btn btn-primary" 
-              onClick={handleSubmitAnswer}
-              disabled={selectedAnswer === null}
+          {showExplanation && question.explanation && (
+            <motion.div 
+              className={`explanation ${selectedAnswer === question.correct ? 'correct-exp' : 'incorrect-exp'}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
             >
-              Submit Answer
-            </button>
-          ) : (
-            <button className="btn btn-primary" onClick={handleNextQuestion}>
-              {isLastQuestion ? 'View Results' : 'Next Question'}
-            </button>
+              <strong>
+                {selectedAnswer === question.correct ? '✅ Correct!' : '❌ Incorrect'}
+              </strong>
+              <p>{question.explanation}</p>
+            </motion.div>
           )}
-        </div>
-      </div>
+
+          <div className="quiz-actions">
+            {!showExplanation ? (
+              <button 
+                className="btn btn-primary" 
+                onClick={handleSubmitAnswer}
+                disabled={selectedAnswer === null}
+              >
+                Submit Answer
+              </button>
+            ) : (
+              <button className="btn btn-primary" onClick={handleNextQuestion}>
+                {isLastQuestion ? 'View Results' : 'Next Question'}
+              </button>
+            )}
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };

@@ -61,28 +61,7 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Completed Lessons Section */}
-        <div className="profile-section">
-          <h2>Completed Lessons</h2>
-          {progress.completedLessons.length > 0 ? (
-            <div className="completed-lessons-list">
-              {curriculum.sections.flatMap(section => 
-                section.topics.filter(topic => progress.completedLessons.includes(topic.id))
-                  .map(topic => ({ ...topic, sectionTitle: section.title }))
-              ).map(lesson => (
-                <div key={lesson.id} className="completed-lesson-item">
-                  <div className="lesson-info">
-                    <span className="lesson-section">{lesson.sectionTitle}</span>
-                    <h4>{lesson.title}</h4>
-                  </div>
-                  <span className="completion-badge">Completed</span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="no-activity">No lessons completed yet. Start learning!</p>
-          )}
-        </div>
+
 
         {/* Settings Section */}
         <div className="profile-section">

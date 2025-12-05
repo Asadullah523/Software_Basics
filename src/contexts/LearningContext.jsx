@@ -14,7 +14,7 @@ export const useLearning = () => {
 export const LearningProvider = ({ children }) => {
   const [progress, setProgress] = useState(() => {
     const saved = localStorage.getItem('learningProgress');
-    return saved ? JSON.parse(saved) : {
+    const defaultState = {
       completedLessons: [],
       quizScores: {},
       totalXP: 0,
@@ -24,6 +24,18 @@ export const LearningProvider = ({ children }) => {
       bookmarkedLessons: [],
       sectionProgress: {}
     };
+    
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return { ...defaultState, ...parsed };
+      } catch (e) {
+        console.error('Error parsing saved progress:', e);
+        return defaultState;
+      }
+    }
+    
+    return defaultState;
   });
 
   const [theme, setTheme] = useState(() => {
@@ -47,6 +59,24 @@ export const LearningProvider = ({ children }) => {
     updateStreak();
   }, []);
 
+  // Helper to check if two dates are the same calendar day
+  const isSameDay = (date1, date2) => {
+    return date1.getFullYear() === date2.getFullYear() &&
+           date1.getMonth() === date2.getMonth() &&
+           date1.getDate() === date2.getDate();
+  };
+
+  // Helper to check if date1 is exactly one day after date2
+  const isNextDay = (date1, date2) => {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    d1.setHours(0, 0, 0, 0);
+    d2.setHours(0, 0, 0, 0);
+    const diffTime = Math.abs(d1 - d2);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    return diffDays === 1;
+  };
+
   // Calculate streak based on last visit
   const updateStreak = () => {
     setProgress(prev => {
@@ -54,23 +84,22 @@ export const LearningProvider = ({ children }) => {
 
       const now = new Date();
       const lastVisit = new Date(prev.lastVisit);
-      const hoursDiff = (now - lastVisit) / (1000 * 60 * 60);
-
-      // If visited within 24 hours, maintain streak
-      if (hoursDiff <= 24) {
+      
+      // If same day, do nothing
+      if (isSameDay(now, lastVisit)) {
         return prev;
       }
-      // If visited within 48 hours, it's been one day
-      else if (hoursDiff <= 48) {
+      
+      // If next day, do nothing (streak is safe, waiting for action to increment)
+      if (isNextDay(now, lastVisit)) {
         return prev;
       }
-      // If gap is more than 48 hours, reset streak
-      else {
-        return {
-          ...prev,
-          currentStreak: 0
-        };
-      }
+      
+      // If gap is more than 1 day, reset streak
+      return {
+        ...prev,
+        currentStreak: 0
+      };
     });
   };
 
@@ -110,16 +139,13 @@ export const LearningProvider = ({ children }) => {
       let newLongestStreak = prev.longestStreak || 0;
 
       if (lastVisit) {
-        const hoursSinceLastVisit = (now - lastVisit) / (1000 * 60 * 60);
-        const daysSinceLastVisit = Math.floor(hoursSinceLastVisit / 24);
-
-        // If it's been less than 24 hours, same day - no change
-        // If it's been 24-48 hours, it's the next day - increment
-        if (hoursSinceLastVisit > 24 && hoursSinceLastVisit <= 48) {
+        if (isSameDay(now, lastVisit)) {
+          // Same day, no streak change
+        } else if (isNextDay(now, lastVisit)) {
+          // Next day, increment streak
           newStreak += 1;
-        }
-        // If gap is more than 48 hours, reset streak
-        else if (hoursSinceLastVisit > 48) {
+        } else {
+          // Missed a day or more, reset to 1
           newStreak = 1;
         }
       } else {
@@ -201,12 +227,15 @@ export const LearningProvider = ({ children }) => {
 
   // Toggle bookmark
   const toggleBookmark = (lessonId) => {
-    setProgress(prev => ({
-      ...prev,
-      bookmarkedLessons: prev.bookmarkedLessons.includes(lessonId)
-        ? prev.bookmarkedLessons.filter(id => id !== lessonId)
-        : [...prev.bookmarkedLessons, lessonId]
-    }));
+    setProgress(prev => {
+      const bookmarks = prev.bookmarkedLessons || [];
+      return {
+        ...prev,
+        bookmarkedLessons: bookmarks.includes(lessonId)
+          ? bookmarks.filter(id => id !== lessonId)
+          : [...bookmarks, lessonId]
+      };
+    });
   };
 
   // Check if lesson is bookmarked

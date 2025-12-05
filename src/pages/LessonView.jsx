@@ -1,6 +1,11 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { FiChevronLeft, FiChevronRight, FiCheckCircle, FiBook } from 'react-icons/fi';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { motion } from 'framer-motion';
 import { useLearning } from '../contexts/LearningContext';
 import curriculum from '../data/curriculum';
 import Quiz from '../components/learning/Quiz';
@@ -26,13 +31,14 @@ const LessonView = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setShowQuiz(false); // Reset quiz state when topic changes
   }, [topicId]);
 
   if (!section || !topic) {
     return (
       <div className="lesson-view">
         <div className="lesson-error">
-          <h1>Topic  Not Found</h1>
+          <h1>Topic Not Found</h1>
           <Link to="/dashboard" className="btn btn-primary">Back to Dashboard</Link>
         </div>
       </div>
@@ -65,7 +71,13 @@ const LessonView = () => {
 
       <div className="lesson-container">
         {/* Lesson Content */}
-        <article className="lesson-content">
+        <motion.article 
+          className="lesson-content"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          key={topicId} // Force re-animation on topic change
+        >
           <header className="lesson-header">
             <div className="lesson-meta">
               <span className="section-badge">
@@ -85,70 +97,45 @@ const LessonView = () => {
 
           {/* Main Content */}
           <div className="lesson-body">
-            {topic.content.split('\n').map((line, index) => {
-              // Helper to parse inline formatting
-              const parseInlineContent = (text) => {
-                // Split by ** or <b> tags
-                const parts = text.split(/(\*\*.*?\*\*|<b>.*?<\/b>)/g);
-                return parts.map((part, i) => {
-                  if (part.startsWith('**') && part.endsWith('**')) {
-                    return <strong key={i}>{part.slice(2, -2)}</strong>;
-                  }
-                  if (part.startsWith('<b>') && part.endsWith('</b>')) {
-                    return <strong key={i}>{part.slice(3, -4)}</strong>;
-                  }
-                  return part;
-                });
-              };
-
-              // Handle headers
-              if (line.startsWith('### ')) {
-                return <h3 key={index}>{line.replace('### ', '')}</h3>;
-              }
-              if (line.startsWith('## ')) {
-                return <h2 key={index}>{line.replace('## ', '')}</h2>;
-              }
-              if (line.startsWith('# ')) {
-                return <h1 key={index}>{line.replace('# ', '')}</h1>;
-              }
-              
-              // Handle code blocks
-              if (line.startsWith('```')) {
-                return null; // Skip code fence markers
-              }
-              
-              // Handle lists
-              if (line.match(/^[-*•]\s/)) {
-                return <li key={index}>{parseInlineContent(line.replace(/^[-*•]\s/, ''))}</li>;
-              }
-              if (line.match(/^\d+\.\s/)) {
-                return <li key={index}>{parseInlineContent(line.replace(/^\d+\.\s/, ''))}</li>;
-              }
-              
-              // Handle special markers
-              if (line.startsWith('✅') || line.startsWith('❌')) {
-                return <p key={index} className="highlight">{parseInlineContent(line)}</p>;
-              }
-              
-              // Regular paragraphs
-              if (line.trim()) {
-                return <p key={index}>{parseInlineContent(line)}</p>;
-              }
-              
-              return <br key={index} />;
-            })}
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              components={{
+                code({node, inline, className, children, ...props}) {
+                  const match = /language-(\w+)/.exec(className || '')
+                  return !inline && match ? (
+                    <SyntaxHighlighter
+                      style={vscDarkPlus}
+                      language={match[1]}
+                      PreTag="div"
+                      {...props}
+                    >
+                      {String(children).replace(/\n$/, '')}
+                    </SyntaxHighlighter>
+                  ) : (
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  )
+                }
+              }}
+            >
+              {topic.content}
+            </ReactMarkdown>
           </div>
 
-          {/* Code Examples */}
+          {/* Code Examples - Kept for backward compatibility if data has separate examples array */}
           {topic.examples && topic.examples.length > 0 && (
             <div className="examples-section">
               <h2>Examples</h2>
               {topic.examples.map((example, index) => (
                 <div key={index} className="code-example">
                   {example.title && <h3>{example.title}</h3>}
-                  <pre>
-                    <code>{example.code}</code>
-                  </pre>
+                  <SyntaxHighlighter
+                    style={vscDarkPlus}
+                    language={example.language || 'javascript'}
+                  >
+                    {example.code}
+                  </SyntaxHighlighter>
                 </div>
               ))}
             </div>
@@ -212,7 +199,7 @@ const LessonView = () => {
               </Link>
             )}
           </div>
-        </article>
+        </motion.article>
 
         {/* Sidebar - Topic List */}
         <aside className="lesson-sidebar">

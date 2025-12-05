@@ -1,10 +1,43 @@
 import { Link } from 'react-router-dom';
-import { FiBook, FiClock, FiCheckCircle, FiTrendingUp } from 'react-icons/fi';
+import { FiBook, FiClock, FiCheckCircle, FiTrendingUp, FiActivity, FiPlay, FiLightbulb } from 'react-icons/fi';
+import { motion } from 'framer-motion';
 import { useLearning } from '../contexts/LearningContext';
 import curriculum from '../data/curriculum';
 import StudyStreak from '../components/learning/StudyStreak';
 import CircularProgress from '../components/common/CircularProgress';
 import './Dashboard.css';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 100
+    }
+  }
+};
+
+const tips = [
+  "Consistency is key! Even 15 minutes a day adds up.",
+  "Try explaining what you learned to a rubber duck (or a friend).",
+  "Take breaks! Your brain needs time to consolidate memory.",
+  "Practice coding by building small projects.",
+  "Don't be afraid to break things. That's how you learn!",
+  "Read other people's code to learn new techniques.",
+  "Focus on understanding concepts, not just memorizing syntax."
+];
 
 const Dashboard = () => {
   const { progress, getSectionProgress, getOverallProgress } = useLearning();
@@ -15,30 +48,98 @@ const Dashboard = () => {
   const completedTopics = progress.completedLessons.length;
   const totalQuizzes = Object.keys(progress.quizScores).length;
 
-  return (
-    <div className="dashboard">
-      <div className="dashboard-header">
-        <h1>Your Learning Dashboard</h1>
-        <p>Track your progress and continue your journey</p>
-      </div>
+  // Daily Tip
+  const randomTip = tips[new Date().getDate() % tips.length];
 
-      {/* Study Streak - Prominent Feature */}
-      <div className="streak-container">
-        <StudyStreak />
+  // Find next lesson to resume
+  let resumeLesson = null;
+  let resumeSection = null;
+
+  for (const section of curriculum.sections) {
+    const incompleteTopic = section.topics.find(topic => !progress.completedLessons.includes(topic.id));
+    if (incompleteTopic) {
+      resumeLesson = incompleteTopic;
+      resumeSection = section;
+      break;
+    }
+  }
+
+  return (
+    <motion.div 
+      className="dashboard"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.div className="dashboard-header" variants={itemVariants}>
+        <h1>Welcome Back! 👋</h1>
+        <p>Your learning journey continues here. Keep up the great work!</p>
+      </motion.div>
+
+      {/* Daily Tip & Resume Learning Grid */}
+      <div className="dashboard-top-grid">
+        {/* Study Streak */}
+        <motion.div className="streak-container" variants={itemVariants}>
+          <StudyStreak />
+        </motion.div>
+
+        {/* Daily Tip */}
+        <motion.div 
+          className="daily-tip-card" 
+          variants={itemVariants}
+          whileHover={{ scale: 1.02 }}
+        >
+          <div className="tip-icon">
+            <FiLightbulb />
+          </div>
+          <div className="tip-content">
+            <h3>Daily Tip</h3>
+            <p>"{randomTip}"</p>
+          </div>
+        </motion.div>
+
+        {/* Resume Learning */}
+        {resumeLesson && (
+          <motion.div 
+            className="resume-card" 
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="resume-content">
+              <h3>Ready to continue?</h3>
+              <p>Pick up where you left off:</p>
+              <div className="resume-lesson-info">
+                <span className="resume-section-title">{resumeSection.title}</span>
+                <span className="resume-lesson-title">{resumeLesson.title}</span>
+              </div>
+            </div>
+            <Link to={`/learn/${resumeSection.id}/${resumeLesson.id}`} className="resume-btn">
+              <FiPlay /> Resume
+            </Link>
+          </motion.div>
+        )}
       </div>
 
       {/* Stats Cards */}
-      <div className="stats-grid">
-        <div className="stat-card progress-card">
+      <motion.div className="stats-grid" variants={itemVariants}>
+        <motion.div 
+          className="stat-card progress-card"
+          whileHover={{ scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
           <CircularProgress 
             value={overallProgress} 
             size={80} 
             strokeWidth={8} 
             label="Overall"
           />
-        </div>
+        </motion.div>
 
-<div className="stat-card">
+        <motion.div 
+          className="stat-card"
+          whileHover={{ scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
           <div className="stat-icon completed">
             <FiCheckCircle />
           </div>
@@ -46,9 +147,13 @@ const Dashboard = () => {
             <div className="stat-value">{completedTopics}/{totalTopics}</div>
             <div className="stat-label">Lessons Completed</div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="stat-card">
+        <motion.div 
+          className="stat-card"
+          whileHover={{ scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
           <div className="stat-icon xp">
             <span>⚡</span>
           </div>
@@ -56,31 +161,40 @@ const Dashboard = () => {
             <div className="stat-value">{progress.totalXP}</div>
             <div className="stat-label">Total XP</div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="stat-card">
+        <motion.div 
+          className="stat-card"
+          whileHover={{ scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
           <div className="stat-icon quizzes">
-            <FiBook />
+            <FiActivity />
           </div>
           <div className="stat-info">
             <div className="stat-value">{totalQuizzes}</div>
             <div className="stat-label">Quizzes Taken</div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Sections Progress */}
-      <div className="sections-container">
+      <motion.div className="sections-container" variants={itemVariants}>
         <h2>Learning Sections</h2>
         <div className="sections-grid">
-          {curriculum.sections.map((section) => {
+          {curriculum.sections.map((section, index) => {
             const sectionProgress = getSectionProgress(section.id);
             const completedInSection = section.topics.filter(topic => 
               progress.completedLessons.includes(topic.id)
             ).length;
 
             return (
-              <div key={section.id} className="section-card">
+              <motion.div 
+                key={section.id} 
+                className="section-card"
+                variants={itemVariants}
+                whileHover={{ y: -5, boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)" }}
+              >
                 <div className="section-card-header">
                   <span className="section-card-icon">{section.icon}</span>
                   <div className="section-card-title">
@@ -89,7 +203,7 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                <div className=" section-card-meta">
+                <div className="section-card-meta">
                   <div className="meta-item">
                     <FiBook size={16} />
                     <span>{section.topics.length} topics</span>
@@ -106,10 +220,12 @@ const Dashboard = () => {
                     <span className="progress-percentage">{sectionProgress}%</span>
                   </div>
                   <div className="progress-bar">
-                    <div 
+                    <motion.div 
                       className="progress-fill" 
-                      style={{ width: `${sectionProgress}%` }}
-                    ></div>
+                      initial={{ width: 0 }}
+                      animate={{ width: `${sectionProgress}%` }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                    />
                   </div>
                 </div>
 
@@ -119,12 +235,12 @@ const Dashboard = () => {
                 >
                   {sectionProgress > 0 ? 'Continue Learning' : 'Start Learning'}
                 </Link>
-              </div>
+              </motion.div>
             );
           })}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

@@ -690,19 +690,28 @@ The **Waterfall Model** is a sequential software development process where progr
 - Get stakeholder approval
 
 ### 2. System Design
-- Design architecture
-- Create diagrams
-- Plan database structure
+- **Design architecture**: Define the high-level structure of the system (e.g., Client-Server, Microservices).
+  - *Example*: Deciding to use a React frontend and a Node.js backend.
+- **Create diagrams**: Visual representations of how components interact (UML, Flowcharts).
+  - *Example*: Drawing a flowchart showing how a user logs in.
+- **Plan database structure**: Designing tables and relationships.
+  - *Example*: Designing a 'Users' table with columns for ID, name, and email.
 
 ### 3. Implementation
-- Write code
-- Follow design specs
-- Build features
+- **Write code**: The actual programming phase where ideas turn into software.
+  - *Example*: Writing the JavaScript function to validate a password.
+- **Follow design specs**: Building exactly what was planned in the design phase.
+  - *Example*: Styling a button to be exactly 20px padding as per the design mockup.
+- **Build features**: Creating the functional parts of the app.
+  - *Example*: Coding the "Add to Cart" functionality.
 
 ### 4. Testing
-- Test functionality
-- Find and fix bugs
-- Verify against requirements
+- **Test functionality**: Checking if features work as expected.
+  - *Example*: Clicking "Login" to see if it actually logs you in.
+- **Find and fix bugs**: Identifying errors and resolving them.
+  - *Example*: Fixing a crash that happens when a user uploads a large image.
+- **Verify against requirements**: Ensuring the product meets the initial goals.
+  - *Example*: Checking if the app loads in under 2 seconds as required.
 
 ### 5. Deployment
 - Release to production
