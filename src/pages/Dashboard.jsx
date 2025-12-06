@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { FiBook, FiClock, FiCheckCircle, FiTrendingUp, FiActivity, FiPlay, FiLightbulb } from 'react-icons/fi';
+import { FiBook, FiClock, FiCheckCircle, FiTrendingUp, FiActivity, FiPlay } from 'react-icons/fi';
+import { FaLightbulb } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useLearning } from '../contexts/LearningContext';
 import curriculum from '../data/curriculum';
@@ -90,7 +91,7 @@ const Dashboard = () => {
           whileHover={{ scale: 1.02 }}
         >
           <div className="tip-icon">
-            <FiLightbulb />
+            <FaLightbulb />
           </div>
           <div className="tip-content">
             <h3>Daily Tip</h3>
