@@ -47,7 +47,7 @@ const Home = () => {
     <div className="home">
       {/* Hero Section */}
       <section className="hero">
-        <div className="hero-background"></div>
+        <div className="hero-background hero-gradient-bg"></div>
         <div className="hero-content">
           <div className="hero-badge">
             <span className="badge-icon">🚀</span>
@@ -55,7 +55,7 @@ const Home = () => {
           </div>
           
           <h1 className="hero-title">
-            Become a <span className="gradient-text">Software Engineer</span>
+            Become a <span className="text-gradient">Software Engineer</span>
             <br />from Scratch
           </h1>
           
@@ -96,7 +96,7 @@ const Home = () => {
           
           <div className="features-grid">
             {features.map((feature, index) => (
-              <div key={index} className="feature-card">
+              <div key={index} className="feature-card card-premium">
                 <div className="feature-icon">{feature.icon}</div>
                 <h3>{feature.title}</h3>
                 <p>{feature.description}</p>

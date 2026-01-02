@@ -21,6 +21,22 @@
     color: var(--text-secondary);
 }
 
+.roadmap-category-group {
+    margin-bottom: var(--space-2xl);
+}
+
+.roadmap-category-title {
+    font-size: var(--font-size-xl);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--primary-600);
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--primary-600);
+    text-align: left;
+}
+
 .roadmap-container {
     display: flex;
     flex-direction: column;

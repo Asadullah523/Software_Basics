@@ -41,45 +41,176 @@ const Sidebar = ({ isOpen, onClose }) => {
           {/* Learning Sections */}
           <div className="sidebar-section">
             <h3 className="sidebar-title">Learning Path</h3>
-            {curriculum.sections.map((section) => {
-              const progress = getSectionProgress(section.id);
-              const isExpanded = expandedSection === section.id;
-              
-              return (
-                <div key={section.id} className="section-item">
-                  <button
-                    className="section-button"
-                    onClick={() => toggleSection(section.id)}
-                  >
-                    <div className="section-header">
-                      <span className="section-icon">{section.icon}</span>
-                      <span className="section-name">{section.title}</span>
-                    </div>
-                    <div className="section-progress">{progress}%</div>
-                  </button>
-                  
-                  {isExpanded && (
-                    <div className="section-topics">
-                      {section.topics.map((topic) => (
-                        <Link
-                          key={topic.id}
-                          to={`/learn/${section.id}/${topic.id}`}
-                          className="topic-link"
-                          onClick={onClose}
-                        >
-                          <span>{topic.title}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            
+            {/* Core Foundations Group */}
+            <div className="sidebar-group">
+              <h4 className="sidebar-category-header">Foundations</h4>
+              {curriculum.sections
+                .filter(s => s.category === 'foundations')
+                .map(section => (
+                  <SectionItem 
+                    key={section.id} 
+                    section={section} 
+                    isExpanded={expandedSection === section.id}
+                    onToggle={() => toggleSection(section.id)}
+                    onClose={onClose}
+                    progress={getSectionProgress(section.id)}
+                  />
+              ))}
+            </div>
+
+            {/* Core Engineering Skills Group */}
+            <div className="sidebar-group">
+              <h4 className="sidebar-category-header">Core Skills</h4>
+              {curriculum.sections
+                .filter(s => s.category === 'core-skills')
+                .map(section => (
+                  <SectionItem 
+                    key={section.id} 
+                    section={section} 
+                    isExpanded={expandedSection === section.id}
+                    onToggle={() => toggleSection(section.id)}
+                    onClose={onClose}
+                    progress={getSectionProgress(section.id)}
+                  />
+              ))}
+            </div>
+
+            {/* CS Deep Dive Group */}
+            <div className="sidebar-group">
+              <h4 className="sidebar-category-header">CS Deep Dive</h4>
+              {curriculum.sections
+                .filter(s => s.category === 'cs-fundamentals-deep')
+                .map(section => (
+                  <SectionItem 
+                    key={section.id} 
+                    section={section} 
+                    isExpanded={expandedSection === section.id}
+                    onToggle={() => toggleSection(section.id)}
+                    onClose={onClose}
+                    progress={getSectionProgress(section.id)}
+                  />
+              ))}
+            </div>
+
+            {/* DSA Group */}
+            <div className="sidebar-group">
+              <h4 className="sidebar-category-header">Data Structures & Algorithms</h4>
+              {curriculum.sections
+                .filter(s => s.category === 'dsa')
+                .map(section => (
+                  <SectionItem 
+                    key={section.id} 
+                    section={section} 
+                    isExpanded={expandedSection === section.id}
+                    onToggle={() => toggleSection(section.id)}
+                    onClose={onClose}
+                    progress={getSectionProgress(section.id)}
+                  />
+              ))}
+            </div>
+
+            {/* System Design Group */}
+            <div className="sidebar-group">
+              <h4 className="sidebar-category-header">System Design</h4>
+              {curriculum.sections
+                .filter(s => s.category === 'system-design')
+                .map(section => (
+                  <SectionItem 
+                    key={section.id} 
+                    section={section} 
+                    isExpanded={expandedSection === section.id}
+                    onToggle={() => toggleSection(section.id)}
+                    onClose={onClose}
+                    progress={getSectionProgress(section.id)}
+                  />
+              ))}
+            </div>
+
+            {/* Web Development Group */}
+            <div className="sidebar-group">
+              <h4 className="sidebar-category-header">Web Development</h4>
+              {curriculum.sections
+                .filter(s => s.category === 'web-dev')
+                .map(section => (
+                  <SectionItem 
+                    key={section.id} 
+                    section={section} 
+                    isExpanded={expandedSection === section.id}
+                    onToggle={() => toggleSection(section.id)}
+                    onClose={onClose}
+                    progress={getSectionProgress(section.id)}
+                  />
+              ))}
+            </div>
+
+            {/* Advanced Topics Group */}
+            <div className="sidebar-group">
+              <h4 className="sidebar-category-header">Advanced Topics</h4>
+              {curriculum.sections
+                .filter(s => s.category === 'advanced' || s.category === 'system-design')
+                .map(section => (
+                  <SectionItem 
+                    key={section.id} 
+                    section={section} 
+                    isExpanded={expandedSection === section.id}
+                    onToggle={() => toggleSection(section.id)}
+                    onClose={onClose}
+                    progress={getSectionProgress(section.id)}
+                  />
+              ))}
+            </div>
+
+            {/* Professional Group */}
+            <div className="sidebar-group">
+              <h4 className="sidebar-category-header">Professional Path</h4>
+              {curriculum.sections
+                .filter(s => s.category === 'professional')
+                .map(section => (
+                  <SectionItem 
+                    key={section.id} 
+                    section={section} 
+                    isExpanded={expandedSection === section.id}
+                    onToggle={() => toggleSection(section.id)}
+                    onClose={onClose}
+                    progress={getSectionProgress(section.id)}
+                  />
+              ))}
+            </div>
+
           </div>
         </div>
       </aside>
     </>
   );
 };
+
+// Helper component for clearer code structure
+const SectionItem = ({ section, isExpanded, onToggle, onClose, progress }) => (
+  <div className="section-item">
+    <button className="section-button" onClick={onToggle}>
+      <div className="section-header">
+        <span className="section-icon">{section.icon}</span>
+        <span className="section-name">{section.title}</span>
+      </div>
+      <div className="section-progress">{progress}%</div>
+    </button>
+    
+    {isExpanded && (
+      <div className="section-topics">
+        {section.topics.map((topic) => (
+          <Link
+            key={topic.id}
+            to={`/learn/${section.id}/${topic.id}`}
+            className="topic-link"
+            onClick={onClose}
+          >
+            <span>{topic.title}</span>
+          </Link>
+        ))}
+      </div>
+    )}
+  </div>
+);
 
 export default Sidebar;

@@ -182,64 +182,85 @@ const Dashboard = () => {
       {/* Sections Progress */}
       <motion.div className="sections-container" variants={itemVariants}>
         <h2>Learning Sections</h2>
-        <div className="sections-grid">
-          {curriculum.sections.map((section, index) => {
-            const sectionProgress = getSectionProgress(section.id);
-            const completedInSection = section.topics.filter(topic => 
-              progress.completedLessons.includes(topic.id)
-            ).length;
+        
+        {[
+          { id: 'foundations', title: 'Foundations' },
+          { id: 'core-skills', title: 'Core Skills' },
+          { id: 'web-dev', title: 'Web Development' },
+          { id: 'cs-fundamentals-deep', title: 'CS Fundamentals Deep' },
+          { id: 'dsa', title: 'Data Structures & Algorithms' },
+          { id: 'advanced', title: 'Advanced Topics', filters: ['advanced', 'system-design'] },
+          { id: 'professional', title: 'Professional Path' }
+        ].map(group => {
+          const groupSections = curriculum.sections.filter(s => 
+            group.filters ? group.filters.includes(s.category) : s.category === group.id
+          );
+          
+          if (groupSections.length === 0) return null;
 
-            return (
-              <motion.div 
-                key={section.id} 
-                className="section-card"
-                variants={itemVariants}
-                whileHover={{ y: -5, boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)" }}
-              >
-                <div className="section-card-header">
-                  <span className="section-card-icon">{section.icon}</span>
-                  <div className="section-card-title">
-                    <h3>{section.title}</h3>
-                    <p>{section.description}</p>
-                  </div>
-                </div>
+          return (
+            <div key={group.id} className="dashboard-category-group">
+              <h3 className="dashboard-category-title">{group.title}</h3>
+              <div className="sections-grid">
+                {groupSections.map((section) => {
+                  const sectionProgress = getSectionProgress(section.id);
+                  const completedInSection = section.topics.filter(topic => 
+                    progress.completedLessons.includes(topic.id)
+                  ).length;
 
-                <div className="section-card-meta">
-                  <div className="meta-item">
-                    <FiBook size={16} />
-                    <span>{section.topics.length} topics</span>
-                  </div>
-                  <div className="meta-item">
-                    <FiClock size={16} />
-                    <span>{section.estimatedTime}</span>
-                  </div>
-                </div>
-
-                <div className="progress-container">
-                  <div className="progress-info">
-                    <span>{completedInSection}/{section.topics.length} completed</span>
-                    <span className="progress-percentage">{sectionProgress}%</span>
-                  </div>
-                  <div className="progress-bar">
+                  return (
                     <motion.div 
-                      className="progress-fill" 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${sectionProgress}%` }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    />
-                  </div>
-                </div>
+                      key={section.id} 
+                      className="section-card card-premium"
+                      variants={itemVariants}
+                    >
+                      <div className="section-card-header">
+                        <span className="section-card-icon">{section.icon}</span>
+                        <div className="section-card-title">
+                          <h3>{section.title}</h3>
+                          <p>{section.description}</p>
+                        </div>
+                      </div>
 
-                <Link 
-                  to={`/learn/${section.id}/${section.topics[0]?.id || ''}`}
-                  className="section-card-btn"
-                >
-                  {sectionProgress > 0 ? 'Continue Learning' : 'Start Learning'}
-                </Link>
-              </motion.div>
-            );
-          })}
-        </div>
+                      <div className="section-card-meta">
+                        <div className="meta-item">
+                          <FiBook size={16} />
+                          <span>{section.topics.length} topics</span>
+                        </div>
+                        <div className="meta-item">
+                          <FiClock size={16} />
+                          <span>{section.estimatedTime}</span>
+                        </div>
+                      </div>
+
+                      <div className="progress-container">
+                        <div className="progress-info">
+                          <span>{completedInSection}/{section.topics.length} completed</span>
+                          <span className="progress-percentage">{sectionProgress}%</span>
+                        </div>
+                        <div className="progress-bar">
+                          <motion.div 
+                            className="progress-fill" 
+                            initial={{ width: 0 }}
+                            animate={{ width: `${sectionProgress}%` }}
+                            transition={{ duration: 1, delay: 0.5 }}
+                          />
+                        </div>
+                      </div>
+
+                      <Link 
+                        to={`/learn/${section.id}/${section.topics[0]?.id || ''}`}
+                        className="section-card-btn"
+                      >
+                        {sectionProgress > 0 ? 'Continue Learning' : 'Start Learning'}
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
       </motion.div>
     </motion.div>
   );
