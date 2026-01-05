@@ -2,10 +2,19 @@
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: var(--card-bg);
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: var(--card-shadow);
+    background: rgba(255, 255, 255, 0.85);
+    /* Slightly more opaque for better text contrast */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+    /* Subtle border */
     transition: all var(--transition-base);
+    height: var(--header-height);
+}
+
+[data-theme="dark"] .header {
+    background: rgba(2, 6, 23, 0.85);
+    border-bottom: 1px solid rgba(30, 41, 59, 0.6);
 }
 
 .header-container {
@@ -14,8 +23,8 @@
     justify-content: space-between;
     max-width: var(--container-max);
     margin: 0 auto;
-    padding: 0 var(--space-lg);
-    height: var(--header-height);
+    padding: 0 var(--space-xl);
+    height: 100%;
 }
 
 /* Left Section */
@@ -26,20 +35,22 @@
 }
 
 .menu-btn {
-    display: flex;
+    display: none;
+    /* Hidden by default on Desktop where sidebar is fixed */
     align-items: center;
     justify-content: center;
-    background: none;
+    background: transparent;
     border: none;
-    color: var(--text-primary);
+    color: var(--text-secondary);
     cursor: pointer;
     padding: var(--space-sm);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-full);
     transition: all var(--transition-fast);
 }
 
 .menu-btn:hover {
     background: var(--hover-bg);
+    color: var(--primary-600);
 }
 
 .logo {
@@ -47,64 +58,68 @@
     align-items: center;
     gap: var(--space-sm);
     text-decoration: none;
-    font-weight: 700;
-    font-size: var(--font-size-lg);
+    font-weight: 800;
+    font-size: 1.35rem;
+    /* Slightly larger */
     color: var(--text-primary);
-    transition: transform var(--transition-fast);
-}
-
-.logo:hover {
-    transform: scale(1.05);
+    letter-spacing: -0.02em;
 }
 
 .logo-icon {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
+    color: var(--primary-600);
+    display: flex;
+    filter: drop-shadow(0 2px 4px rgba(124, 58, 237, 0.2));
 }
 
 .logo-text {
     background: var(--gradient-primary);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 /* Navigation */
 .header-nav {
     display: flex;
     align-items: center;
-    gap: var(--space-lg);
+    gap: var(--space-md);
+    background: var(--bg-tertiary);
+    /* Pill background for nav */
+    padding: 4px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .header-nav {
+    background: rgba(30, 41, 59, 0.5);
 }
 
 .nav-link {
     color: var(--text-secondary);
     text-decoration: none;
-    font-weight: 600;
-    padding: var(--space-xs) var(--space-md);
-    border-radius: var(--radius-md);
+    font-weight: 500;
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
     transition: all var(--transition-fast);
-    position: relative;
-    font-size: var(--font-size-sm);
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%) scaleX(0);
-    width: 80%;
-    height: 2px;
-    background: var(--gradient-primary);
-    transition: transform var(--transition-fast);
+    font-size: 0.9rem;
 }
 
 .nav-link:hover {
     color: var(--text-primary);
-    background: var(--hover-bg);
 }
 
-.nav-link:hover::after {
-    transform: translateX(-50%) scaleX(1);
+/* We could add an 'active' class logic in React, but CSS hover effect is good */
+.nav-link.active,
+a.nav-link[aria-current="page"] {
+    background: var(--bg-primary);
+    color: var(--primary-600);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+}
+
+[data-theme="dark"] .nav-link:hover {
+    color: var(--text-primary);
 }
 
 /* Right Section */
@@ -115,100 +130,109 @@
 }
 
 .header-search {
-    width: 250px;
+    width: 240px;
     margin-right: var(--space-sm);
 }
 
-.header-progress {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    padding: var(--space-xs) var(--space-sm);
-    background: var(--bg-secondary);
-    border-radius: var(--radius-full);
-    color: var(--primary-600);
-    font-weight: 600;
-    font-size: var(--font-size-sm);
-}
-
-.progress-text {
-    color: var(--primary-600);
-}
-
+/* Progress & XP Pills */
+.header-progress,
 .header-xp {
     display: flex;
     align-items: center;
-    gap: var(--space-xs);
-    padding: var(--space-sm) var(--space-md);
-    background: rgba(99, 102, 241, 0.1);
+    gap: 6px;
+    padding: 6px 12px;
     border-radius: var(--radius-full);
-    color: var(--primary-600);
-    font-weight: 700;
-    font-size: var(--font-size-sm);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: default;
+    transition: transform var(--transition-fast);
 }
 
-.xp-icon {
-    font-size: 1.1rem;
+.header-progress {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
+.header-xp {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.header-progress:hover,
+.header-xp:hover {
+    transform: translateY(-1px);
+}
+
+/* Theme Toggle */
 .theme-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-tertiary);
-    border: none;
-    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
     cursor: pointer;
-    padding: var(--space-sm);
-    width: 36px;
-    height: 36px;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
     border-radius: var(--radius-full);
     transition: all var(--transition-fast);
 }
 
 .theme-toggle:hover {
-    background: var(--primary-600);
-    color: white;
-    transform: rotate(180deg);
+    border-color: var(--primary-400);
+    color: var(--primary-600);
+    background: var(--primary-50);
 }
 
+[data-theme="dark"] .theme-toggle:hover {
+    background: rgba(124, 58, 237, 0.2);
+}
+
+/* Profile Link */
 .profile-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-    padding: var(--space-sm);
-    width: 36px;
-    height: 36px;
+    background: var(--gradient-primary);
+    color: white;
+    width: 40px;
+    height: 40px;
     border-radius: var(--radius-full);
-    transition: all var(--transition-fast);
+    transition: all var(--transition-bounce);
+    box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.3);
 }
 
 .profile-link:hover {
-    background: var(--primary-600);
-    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px -2px rgba(124, 58, 237, 0.4);
 }
 
-/* Mobile Menu Button */
+/* Mobile */
 .mobile-menu-btn {
     display: none;
-    align-items: center;
-    justify-content: center;
     background: none;
     border: none;
     color: var(--text-primary);
     cursor: pointer;
-    padding: var(--space-sm);
+    padding: var(--space-xs);
 }
 
-/* Mobile Navigation */
 .mobile-nav {
-    display: none;
+    display: flex;
+    /* Fixed: was display:none, now rely on conditional rendering */
     flex-direction: column;
     padding: var(--space-md);
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    z-index: 999;
     animation: slideDown 0.3s ease;
 }
 
@@ -225,16 +249,23 @@
 }
 
 .mobile-nav .nav-link {
-    padding: var(--space-md);
+    padding: 12px;
     border-bottom: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
 }
 
 .mobile-nav .nav-link:last-child {
     border-bottom: none;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+    .menu-btn {
+        display: flex;
+        /* Show sidebar toggle on tablet/mobile */
+    }
+}
+
+@media (max-width: 900px) {
     .desktop-nav {
         display: none;
     }
@@ -243,32 +274,24 @@
         display: flex;
     }
 
-    .mobile-nav {
-        display: flex;
-    }
-
     .header-progress,
     .header-xp {
         display: none;
     }
 
-    .logo-text {
-        display: none;
-    }
-
+    /* Hide stats on small screens to save space */
     .header-container {
         padding: 0 var(--space-md);
     }
 }
 
 @media (max-width: 480px) {
-    .header-right {
-        gap: var(--space-sm);
+    .header-search {
+        display: none;
     }
 
-    .theme-toggle,
-    .profile-link {
-        width: 36px;
-        height: 36px;
+    /* Hide search on mobile for now */
+    .logo-text {
+        display: none;
     }
 }
