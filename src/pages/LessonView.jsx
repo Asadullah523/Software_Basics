@@ -158,7 +158,7 @@ const LessonView = () => {
           ) : (
             <div className="lesson-actions">
               <button 
-                className="btn btn-success btn-lg"
+                className={`btn btn-lg ${isCompleted ? 'btn-outline-success' : 'btn-success'}`}
                 onClick={handleComplete}
               >
                 {isCompleted ? (

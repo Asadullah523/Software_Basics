@@ -207,12 +207,11 @@ export const LearningProvider = ({ children }) => {
 
   // Get overall progress
   const getOverallProgress = () => {
-    const sections = Object.values(progress.sectionProgress);
-    if (sections.length === 0) return 0;
-    const totalCompleted = sections.reduce((sum, s) => sum + s.completed, 0);
-    const totalLessons = sections.reduce((sum, s) => sum + s.total, 0);
-    if (totalLessons === 0) return 0;
-    return Math.round((totalCompleted / totalLessons) * 100);
+    const totalTopics = curriculum.sections.reduce((sum, section) => sum + section.topics.length, 0);
+    const completedTopics = progress.completedLessons.length;
+    
+    if (totalTopics === 0) return 0;
+    return Math.round((completedTopics / totalTopics) * 100);
   };
 
   // Get current streak
