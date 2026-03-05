@@ -1,6 +1,6 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { FiChevronLeft, FiChevronRight, FiCheckCircle, FiBook } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiCheckCircle, FiBook, FiRefreshCw } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -21,7 +21,7 @@ const LessonView = () => {
   // Find current section and topic
   const section = curriculum.sections.find(s => s.id === sectionId);
   const topic = section?.topics.find(t => t.id === topicId);
-  
+
   // Find adjacent topics for navigation
   const topicIndex = section?.topics.findIndex(t => t.id === topicId) ?? -1;
   const prevTopic = topicIndex > 0 ? section.topics[topicIndex - 1] : null;
@@ -33,6 +33,18 @@ const LessonView = () => {
     window.scrollTo(0, 0);
     setShowQuiz(false); // Reset quiz state when topic changes
   }, [topicId]);
+
+  // Lock scroll when quiz is open
+  useEffect(() => {
+    if (showQuiz) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [showQuiz]);
 
   if (!section || !topic) {
     return (
@@ -71,7 +83,7 @@ const LessonView = () => {
 
       <div className="lesson-container">
         {/* Lesson Content */}
-        <motion.article 
+        <motion.article
           className="lesson-content"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -97,10 +109,10 @@ const LessonView = () => {
 
           {/* Main Content */}
           <div className="lesson-body">
-            <ReactMarkdown 
+            <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
-                code({node, inline, className, children, ...props}) {
+                code({ node, inline, className, children, ...props }) {
                   const match = /language-(\w+)/.exec(className || '')
                   return !inline && match ? (
                     <SyntaxHighlighter
@@ -141,40 +153,31 @@ const LessonView = () => {
             </div>
           )}
 
-          {/* Quiz Section */}
-          {showQuiz && topic.quiz && topic.quiz.length > 0 ? (
-            <Quiz 
-              questions={topic.quiz} 
-              topicId={topicId}
-              onQuizPass={() => completeLesson(topicId, 10)}
-              onComplete={() => {
-                if (nextTopic) {
-                  navigate(`/learn/${sectionId}/${nextTopic.id}`);
-                } else {
-                  navigate('/dashboard');
-                }
-              }}
-            />
-          ) : (
-            <div className="lesson-actions">
-              <button 
-                className={`btn btn-lg ${isCompleted ? 'btn-outline-success' : 'btn-success'}`}
+          {/* Quiz Trigger Section (Moved from inline quiz) */}
+          <div className="lesson-actions">
+            {isCompleted ? (
+              <button
+                className="btn btn-lg btn-outline-success"
+                onClick={() => setShowQuiz(true)}
+              >
+                {topic.quiz && topic.quiz.length > 0 ? 'Retake Quiz' : 'Review Lesson'}
+                <FiRefreshCw style={{ marginLeft: '10px' }} />
+              </button>
+            ) : (
+              <button
+                className="btn btn-lg btn-success"
                 onClick={handleComplete}
               >
-                {isCompleted ? (
-                  topic.quiz && topic.quiz.length > 0 ? 'Retake Quiz' : 'Next Topic'
-                ) : (
-                  topic.quiz && topic.quiz.length > 0 ? 'Complete & Take Quiz' : 'Mark as Complete'
-                )}
-                <FiCheckCircle />
+                {topic.quiz && topic.quiz.length > 0 ? 'Complete & Take Quiz' : 'Mark as Complete'}
+                <FiCheckCircle style={{ marginLeft: '10px' }} />
               </button>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Navigation */}
           <div className="lesson-navigation">
             {prevTopic ? (
-              <Link 
+              <Link
                 to={`/learn/${sectionId}/${prevTopic.id}`}
                 className="nav-btn prev"
               >
@@ -187,7 +190,7 @@ const LessonView = () => {
             ) : <div />}
 
             {nextTopic && (
-              <Link 
+              <Link
                 to={`/learn/${sectionId}/${nextTopic.id}`}
                 className="nav-btn next"
               >
@@ -207,7 +210,7 @@ const LessonView = () => {
           <ul className="topic-list">
             {section.topics.map((t, index) => (
               <li key={t.id}>
-                <Link 
+                <Link
                   to={`/learn/${sectionId}/${t.id}`}
                   className={`topic-link ${t.id === topicId ? 'active' : ''} ${isLessonCompleted(t.id) ? 'completed' : ''}`}
                 >
@@ -220,6 +223,22 @@ const LessonView = () => {
           </ul>
         </aside>
       </div>
+
+      {/* Quiz Modal */}
+      {showQuiz && topic.quiz && topic.quiz.length > 0 && (
+        <Quiz
+          questions={topic.quiz}
+          topicId={topicId}
+          onQuizPass={() => completeLesson(topicId, 10)}
+          onComplete={() => {
+            setShowQuiz(false);
+            if (!isCompleted) {
+              // If they just passed, maybe navigate?
+              // User says "when quiz is done then user can proceed"
+            }
+          }}
+        />
+      )}
     </div>
   );
 };

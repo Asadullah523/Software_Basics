@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiCheckCircle, FiXCircle, FiRefreshCw } from 'react-icons/fi';
+import { FiCheckCircle, FiXCircle, FiRefreshCw, FiArrowRight, FiInfo } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLearning } from '../../contexts/LearningContext';
 import './Quiz.css';
@@ -11,7 +11,7 @@ const Quiz = ({ questions, topicId, onComplete, onQuizPass }) => {
   const [score, setScore] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
   const [quizCompleted, setQuizCompleted] = useState(false);
-  
+
   const { saveQuizScore } = useLearning();
 
   const question = questions[currentQuestion];
@@ -28,7 +28,7 @@ const Quiz = ({ questions, topicId, onComplete, onQuizPass }) => {
 
     const isCorrect = selectedAnswer === question.correct;
     setShowExplanation(true);
-    
+
     if (isCorrect) {
       setScore(score + 1);
     }
@@ -46,7 +46,7 @@ const Quiz = ({ questions, topicId, onComplete, onQuizPass }) => {
       // Quiz complete
       const finalScore = score + (selectedAnswer === question.correct ? 1 : 0);
       saveQuizScore(topicId, finalScore, questions.length);
-      
+
       // Check if passed and trigger callback
       const percentage = Math.round((finalScore / questions.length) * 100);
       if (percentage >= 70 && onQuizPass) {
@@ -74,137 +74,154 @@ const Quiz = ({ questions, topicId, onComplete, onQuizPass }) => {
     const passed = percentage >= 70;
 
     return (
-      <motion.div 
-        className="quiz-results"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className={`results-card ${passed ? 'passed' : 'failed'}`}>
-          <motion.div 
-            className="results-icon"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
+      <div className="quiz-overlay">
+        <div className="quiz-container results-modal">
+          <div className="quiz-header">
+            <button className="close-quiz" onClick={onComplete} title="Close Quiz">
+              <FiXCircle />
+            </button>
+            <h2>Quiz Results</h2>
+          </div>
+          <motion.div
+            className="quiz-results"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
           >
-            {passed ? <FiCheckCircle size={64} /> : <FiXCircle size={64} />}
-          </motion.div>
-          <h2>{passed ? 'Congratulations!' : 'Keep Learning!'}</h2>
-          <p className="results-message">
-            {passed 
-              ? 'You passed the quiz! Great job on mastering this topic.'
-              : 'Don\'t worry! Review the material and try again.'}
-          </p>
-          
-          <div className="score-display">
-            <div className="score-circle">
-              <span className="score-percentage">{percentage}%</span>
-              <span className="score-fraction">{score}/{questions.length}</span>
-            </div>
-          </div>
+            <div className={`results-card ${passed ? 'passed' : 'failed'}`}>
+              <motion.div
+                className="results-icon"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
+              >
+                {passed ? <FiCheckCircle size={64} /> : <FiXCircle size={64} />}
+              </motion.div>
+              <h2>{passed ? 'Congratulations!' : 'Keep Learning!'}</h2>
+              <p className="results-message">
+                {passed
+                  ? 'You passed the quiz! Great job on mastering this topic.'
+                  : 'Don\'t worry! Review the material and try again.'}
+              </p>
 
-          <div className="results-actions">
-            <button className="btn btn-secondary" onClick={handleRetake}>
-              <FiRefreshCw /> Retake Quiz
-            </button>
-            <button className="btn btn-primary" onClick={onComplete}>
-              Continue Learning
-            </button>
-          </div>
+              <div className="score-display">
+                <div className="score-circle">
+                  <span className="score-percentage">{percentage}%</span>
+                  <span className="score-fraction">{score}/{questions.length}</span>
+                </div>
+              </div>
+
+              <div className="results-actions">
+                <button className="btn btn-secondary" onClick={handleRetake}>
+                  <FiRefreshCw /> Retake Quiz
+                </button>
+                <button className="btn btn-primary" onClick={onComplete}>
+                  Continue Learning
+                </button>
+              </div>
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
+      </div>
     );
   }
 
   return (
-    <div className="quiz-container">
-      <div className="quiz-header">
-        <h2>Quiz Time!</h2>
-        <div className="quiz-progress">
-          <span>Question {currentQuestion + 1} of {questions.length}</span>
-          <div className="progress-bar">
-            <motion.div 
-              className="progress-fill" 
-              initial={{ width: 0 }}
-              animate={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
-              transition={{ duration: 0.5 }}
-            />
+    <div className="quiz-overlay" onClick={(e) => {
+      // Prevent closing if clicked outside? User said "when quiz is done then user can proceed"
+      // So maybe don't close on click outside, but we should have a close button just in case.
+    }}>
+      <div className="quiz-container" onClick={(e) => e.stopPropagation()}>
+        <div className="quiz-header">
+          <button className="close-quiz" onClick={onComplete} title="Close Quiz">
+            <FiXCircle />
+          </button>
+          <h2>Quiz Time!</h2>
+          <div className="quiz-progress">
+            <span>Question {currentQuestion + 1} of {questions.length}</span>
+            <div className="progress-bar">
+              <motion.div
+                className="progress-fill"
+                initial={{ width: 0 }}
+                animate={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+                transition={{ duration: 0.5 }}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <AnimatePresence mode="wait">
-        <motion.div 
-          key={currentQuestion}
-          className="quiz-question"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.3 }}
-        >
-          <h3>{question.question}</h3>
-          
-          <div className="quiz-options">
-            {question.options.map((option, index) => (
-              <button
-                key={index}
-                className={`quiz-option ${
-                  selectedAnswer === index ? 'selected' : ''
-                } ${
-                  showExplanation
-                    ? index === question.correct
-                      ? 'correct'
-                      : selectedAnswer === index
-                      ? 'incorrect'
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentQuestion}
+            className="quiz-question"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <h3>{question.question}</h3>
+
+            <div className="quiz-options">
+              {question.options.map((option, index) => (
+                <button
+                  key={index}
+                  className={`quiz-option ${selectedAnswer === index ? 'selected' : ''
+                    } ${showExplanation
+                      ? index === question.correct
+                        ? 'correct'
+                        : selectedAnswer === index
+                          ? 'incorrect'
+                          : ''
                       : ''
-                    : ''
-                }`}
-                onClick={() => handleAnswerSelect(index)}
-                disabled={showExplanation}
-              >
-                <span className="option-letter">{String.fromCharCode(65 + index)}</span>
-                <span className="option-text">{option}</span>
-                {showExplanation && index === question.correct && (
-                  <FiCheckCircle className="option-icon correct-icon" />
-                )}
-                {showExplanation && selectedAnswer === index && index !== question.correct && (
-                  <FiXCircle className="option-icon incorrect-icon" />
-                )}
-              </button>
-            ))}
-          </div>
+                    }`}
+                  onClick={() => handleAnswerSelect(index)}
+                  disabled={showExplanation}
+                >
+                  <span className="option-letter">{String.fromCharCode(65 + index)}</span>
+                  <span className="option-text">{option}</span>
+                  {showExplanation && index === question.correct && (
+                    <FiCheckCircle className="option-icon correct-icon" />
+                  )}
+                  {showExplanation && selectedAnswer === index && index !== question.correct && (
+                    <FiXCircle className="option-icon incorrect-icon" />
+                  )}
+                </button>
+              ))}
+            </div>
 
-          {showExplanation && question.explanation && (
-            <motion.div 
-              className={`explanation ${selectedAnswer === question.correct ? 'correct-exp' : 'incorrect-exp'}`}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <strong>
-                {selectedAnswer === question.correct ? '✅ Correct!' : '❌ Incorrect'}
-              </strong>
-              <p>{question.explanation}</p>
-            </motion.div>
-          )}
-
-          <div className="quiz-actions">
-            {!showExplanation ? (
-              <button 
-                className="btn btn-primary" 
-                onClick={handleSubmitAnswer}
-                disabled={selectedAnswer === null}
+            {showExplanation && question.explanation && (
+              <motion.div
+                className={`explanation ${selectedAnswer === question.correct ? 'correct-exp' : 'incorrect-exp'}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
               >
-                Submit Answer
-              </button>
-            ) : (
-              <button className="btn btn-primary" onClick={handleNextQuestion}>
-                {isLastQuestion ? 'View Results' : 'Next Question'}
-              </button>
+                <strong>
+                  {selectedAnswer === question.correct ? '✅ Correct!' : '❌ Incorrect'}
+                </strong>
+                <p>{question.explanation}</p>
+              </motion.div>
             )}
-          </div>
-        </motion.div>
-      </AnimatePresence>
+
+            <div className="quiz-actions">
+              {!showExplanation ? (
+                <button
+                  className="btn btn-primary"
+                  onClick={handleSubmitAnswer}
+                  disabled={selectedAnswer === null}
+                >
+                  Submit Answer
+                </button>
+              ) : (
+                <button className="btn btn-primary" onClick={handleNextQuestion}>
+                  {isLastQuestion ? 'View Results' : 'Next Question'}
+                  <FiArrowRight />
+                </button>
+              )}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
   );
 };

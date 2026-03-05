@@ -240,7 +240,7 @@
 }
 
 .stat-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
     box-shadow: var(--card-shadow-lg);
     border-color: var(--primary-300);
 }

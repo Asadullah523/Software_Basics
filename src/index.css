@@ -328,6 +328,7 @@ a:hover {
     transition: all var(--transition-bounce);
     position: relative;
     z-index: 1;
+    will-change: transform, box-shadow;
 }
 
 [data-theme="dark"] .card-premium {
@@ -342,6 +343,7 @@ a:hover {
     padding: 2px;
     background: linear-gradient(135deg, rgba(124, 58, 237, 0.4), rgba(236, 72, 153, 0.2), transparent);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     opacity: 0.5;
@@ -354,7 +356,7 @@ a:hover {
 
 .card-premium:hover {
     box-shadow: var(--card-shadow-lg), var(--card-shadow-glow);
-    transform: translateY(-6px) scale(1.01);
+    transform: translateY(-3px);
 }
 
 /* Glassmorphism Utilities - Crystallized */

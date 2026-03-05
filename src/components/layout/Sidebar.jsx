@@ -18,7 +18,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     <>
       {/* Overlay for mobile */}
       {isOpen && <div className="sidebar-overlay" onClick={onClose} />}
-      
+
       <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-content">
           {/* Quick Links */}
@@ -41,22 +41,22 @@ const Sidebar = ({ isOpen, onClose }) => {
           {/* Learning Sections */}
           <div className="sidebar-section">
             <h3 className="sidebar-title">Learning Path</h3>
-            
+
             {/* Core Foundations Group */}
             <div className="sidebar-group">
               <h4 className="sidebar-category-header">Foundations</h4>
               {curriculum.sections
                 .filter(s => s.category === 'foundations')
                 .map(section => (
-                  <SectionItem 
-                    key={section.id} 
-                    section={section} 
+                  <SectionItem
+                    key={section.id}
+                    section={section}
                     isExpanded={expandedSection === section.id}
                     onToggle={() => toggleSection(section.id)}
                     onClose={onClose}
                     progress={getSectionProgress(section.id)}
                   />
-              ))}
+                ))}
             </div>
 
             {/* Core Engineering Skills Group */}
@@ -65,15 +65,15 @@ const Sidebar = ({ isOpen, onClose }) => {
               {curriculum.sections
                 .filter(s => s.category === 'core-skills')
                 .map(section => (
-                  <SectionItem 
-                    key={section.id} 
-                    section={section} 
+                  <SectionItem
+                    key={section.id}
+                    section={section}
                     isExpanded={expandedSection === section.id}
                     onToggle={() => toggleSection(section.id)}
                     onClose={onClose}
                     progress={getSectionProgress(section.id)}
                   />
-              ))}
+                ))}
             </div>
 
             {/* CS Deep Dive Group */}
@@ -82,15 +82,15 @@ const Sidebar = ({ isOpen, onClose }) => {
               {curriculum.sections
                 .filter(s => s.category === 'cs-fundamentals-deep')
                 .map(section => (
-                  <SectionItem 
-                    key={section.id} 
-                    section={section} 
+                  <SectionItem
+                    key={section.id}
+                    section={section}
                     isExpanded={expandedSection === section.id}
                     onToggle={() => toggleSection(section.id)}
                     onClose={onClose}
                     progress={getSectionProgress(section.id)}
                   />
-              ))}
+                ))}
             </div>
 
             {/* DSA Group */}
@@ -99,15 +99,15 @@ const Sidebar = ({ isOpen, onClose }) => {
               {curriculum.sections
                 .filter(s => s.category === 'dsa')
                 .map(section => (
-                  <SectionItem 
-                    key={section.id} 
-                    section={section} 
+                  <SectionItem
+                    key={section.id}
+                    section={section}
                     isExpanded={expandedSection === section.id}
                     onToggle={() => toggleSection(section.id)}
                     onClose={onClose}
                     progress={getSectionProgress(section.id)}
                   />
-              ))}
+                ))}
             </div>
 
             {/* System Design Group */}
@@ -116,15 +116,15 @@ const Sidebar = ({ isOpen, onClose }) => {
               {curriculum.sections
                 .filter(s => s.category === 'system-design')
                 .map(section => (
-                  <SectionItem 
-                    key={section.id} 
-                    section={section} 
+                  <SectionItem
+                    key={section.id}
+                    section={section}
                     isExpanded={expandedSection === section.id}
                     onToggle={() => toggleSection(section.id)}
                     onClose={onClose}
                     progress={getSectionProgress(section.id)}
                   />
-              ))}
+                ))}
             </div>
 
             {/* Web Development Group */}
@@ -133,15 +133,15 @@ const Sidebar = ({ isOpen, onClose }) => {
               {curriculum.sections
                 .filter(s => s.category === 'web-dev')
                 .map(section => (
-                  <SectionItem 
-                    key={section.id} 
-                    section={section} 
+                  <SectionItem
+                    key={section.id}
+                    section={section}
                     isExpanded={expandedSection === section.id}
                     onToggle={() => toggleSection(section.id)}
                     onClose={onClose}
                     progress={getSectionProgress(section.id)}
                   />
-              ))}
+                ))}
             </div>
 
             {/* Advanced Topics Group */}
@@ -150,15 +150,15 @@ const Sidebar = ({ isOpen, onClose }) => {
               {curriculum.sections
                 .filter(s => s.category === 'advanced' || s.category === 'system-design')
                 .map(section => (
-                  <SectionItem 
-                    key={section.id} 
-                    section={section} 
+                  <SectionItem
+                    key={section.id}
+                    section={section}
                     isExpanded={expandedSection === section.id}
                     onToggle={() => toggleSection(section.id)}
                     onClose={onClose}
                     progress={getSectionProgress(section.id)}
                   />
-              ))}
+                ))}
             </div>
 
             {/* Professional Group */}
@@ -167,15 +167,15 @@ const Sidebar = ({ isOpen, onClose }) => {
               {curriculum.sections
                 .filter(s => s.category === 'professional')
                 .map(section => (
-                  <SectionItem 
-                    key={section.id} 
-                    section={section} 
+                  <SectionItem
+                    key={section.id}
+                    section={section}
                     isExpanded={expandedSection === section.id}
                     onToggle={() => toggleSection(section.id)}
                     onClose={onClose}
                     progress={getSectionProgress(section.id)}
                   />
-              ))}
+                ))}
             </div>
 
           </div>
@@ -188,14 +188,17 @@ const Sidebar = ({ isOpen, onClose }) => {
 // Helper component for clearer code structure
 const SectionItem = ({ section, isExpanded, onToggle, onClose, progress }) => (
   <div className="section-item">
-    <button className="section-button" onClick={onToggle}>
+    <button
+      className={`section-button ${isExpanded ? 'active' : ''}`}
+      onClick={onToggle}
+    >
       <div className="section-header">
         <span className="section-icon">{section.icon}</span>
         <span className="section-name">{section.title}</span>
       </div>
       <div className="section-progress">{progress}%</div>
     </button>
-    
+
     {isExpanded && (
       <div className="section-topics">
         {section.topics.map((topic) => (

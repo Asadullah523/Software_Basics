@@ -43,7 +43,7 @@ const tips = [
 const Dashboard = () => {
   const { progress, getSectionProgress, getOverallProgress } = useLearning();
   const overallProgress = getOverallProgress();
-  
+
   // Calculate stats
   const totalTopics = curriculum.sections.reduce((sum, section) => sum + section.topics.length, 0);
   const completedTopics = progress.completedLessons.length;
@@ -66,7 +66,7 @@ const Dashboard = () => {
   }
 
   return (
-    <motion.div 
+    <motion.div
       className="dashboard"
       variants={containerVariants}
       initial="hidden"
@@ -85,10 +85,9 @@ const Dashboard = () => {
         </motion.div>
 
         {/* Daily Tip */}
-        <motion.div 
-          className="daily-tip-card" 
+        <motion.div
+          className="daily-tip-card"
           variants={itemVariants}
-          whileHover={{ scale: 1.02 }}
         >
           <div className="tip-icon">
             <FaLightbulb />
@@ -101,10 +100,9 @@ const Dashboard = () => {
 
         {/* Resume Learning */}
         {resumeLesson && (
-          <motion.div 
-            className="resume-card" 
+          <motion.div
+            className="resume-card"
             variants={itemVariants}
-            whileHover={{ scale: 1.02 }}
           >
             <div className="resume-content">
               <h3>Ready to continue?</h3>
@@ -123,22 +121,20 @@ const Dashboard = () => {
 
       {/* Stats Cards */}
       <motion.div className="stats-grid" variants={itemVariants}>
-        <motion.div 
+        <motion.div
           className="stat-card progress-card"
-          whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
-          <CircularProgress 
-            value={overallProgress} 
-            size={80} 
-            strokeWidth={8} 
+          <CircularProgress
+            value={overallProgress}
+            size={80}
+            strokeWidth={8}
             label="Overall"
           />
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="stat-card"
-          whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
           <div className="stat-icon completed">
@@ -150,9 +146,8 @@ const Dashboard = () => {
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="stat-card"
-          whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
           <div className="stat-icon xp">
@@ -164,9 +159,8 @@ const Dashboard = () => {
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="stat-card"
-          whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
           <div className="stat-icon quizzes">
@@ -182,7 +176,7 @@ const Dashboard = () => {
       {/* Sections Progress */}
       <motion.div className="sections-container" variants={itemVariants}>
         <h2>Learning Sections</h2>
-        
+
         {[
           { id: 'foundations', title: 'Foundations' },
           { id: 'core-skills', title: 'Core Skills' },
@@ -192,10 +186,10 @@ const Dashboard = () => {
           { id: 'advanced', title: 'Advanced Topics', filters: ['advanced', 'system-design'] },
           { id: 'professional', title: 'Professional Path' }
         ].map(group => {
-          const groupSections = curriculum.sections.filter(s => 
+          const groupSections = curriculum.sections.filter(s =>
             group.filters ? group.filters.includes(s.category) : s.category === group.id
           );
-          
+
           if (groupSections.length === 0) return null;
 
           return (
@@ -204,13 +198,13 @@ const Dashboard = () => {
               <div className="sections-grid">
                 {groupSections.map((section) => {
                   const sectionProgress = getSectionProgress(section.id);
-                  const completedInSection = section.topics.filter(topic => 
+                  const completedInSection = section.topics.filter(topic =>
                     progress.completedLessons.includes(topic.id)
                   ).length;
 
                   return (
-                    <motion.div 
-                      key={section.id} 
+                    <motion.div
+                      key={section.id}
                       className="section-card card-premium"
                       variants={itemVariants}
                     >
@@ -239,8 +233,8 @@ const Dashboard = () => {
                           <span className="progress-percentage">{sectionProgress}%</span>
                         </div>
                         <div className="progress-bar">
-                          <motion.div 
-                            className="progress-fill" 
+                          <motion.div
+                            className="progress-fill"
                             initial={{ width: 0 }}
                             animate={{ width: `${sectionProgress}%` }}
                             transition={{ duration: 1, delay: 0.5 }}
@@ -248,7 +242,7 @@ const Dashboard = () => {
                         </div>
                       </div>
 
-                      <Link 
+                      <Link
                         to={`/learn/${section.id}/${section.topics[0]?.id || ''}`}
                         className="section-card-btn"
                       >
