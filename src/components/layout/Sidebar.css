@@ -217,13 +217,16 @@
 
 /* Topics list inside sections */
 .section-topics {
-    margin-top: 2px;
-    margin-bottom: 4px;
+    margin-top: 4px;
+    margin-bottom: 8px;
     padding-left: 12px;
     position: relative;
-    border-left: 2px solid var(--border-color);
-    margin-left: 20px;
+    /* Removed border-left that was overlapping */
+    margin-left: 18px;
     animation: slideIn 0.2s ease-out;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 @keyframes slideIn {
@@ -241,13 +244,13 @@
 .topic-link {
     display: flex;
     align-items: center;
-    padding: 6px 12px;
+    gap: 10px;
+    padding: 6px 10px;
     color: var(--text-secondary);
     text-decoration: none;
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    border-radius: var(--radius-md);
     transition: all var(--transition-fast);
     font-size: 0.85rem;
-    margin-bottom: 1px;
     position: relative;
 }
 
@@ -256,20 +259,43 @@
     background: var(--hover-bg);
 }
 
-.topic-link::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--border-color);
-    margin-right: 12px;
-    transition: background var(--transition-fast);
+.topic-indicator {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.topic-link:hover::before {
+.topic-indicator .dot {
+    width: 4px;
+    height: 4px;
+    background: var(--text-tertiary);
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.topic-link:hover .dot {
     background: var(--primary-400);
-    box-shadow: 0 0 5px var(--primary-400);
+    transform: scale(1.5);
+    box-shadow: 0 0 8px var(--primary-400);
+}
+
+.completed-icon {
+    color: var(--success);
+    font-size: 1.1rem;
+    stroke-width: 3px;
+    filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.3));
+}
+
+.topic-link.completed .topic-title {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.topic-title {
+    line-height: 1.4;
 }
 
 /* Responsive */

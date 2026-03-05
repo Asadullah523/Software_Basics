@@ -186,34 +186,44 @@ const Sidebar = ({ isOpen, onClose }) => {
 };
 
 // Helper component for clearer code structure
-const SectionItem = ({ section, isExpanded, onToggle, onClose, progress }) => (
-  <div className="section-item">
-    <button
-      className={`section-button ${isExpanded ? 'active' : ''}`}
-      onClick={onToggle}
-    >
-      <div className="section-header">
-        <span className="section-icon">{section.icon}</span>
-        <span className="section-name">{section.title}</span>
-      </div>
-      <div className="section-progress">{progress}%</div>
-    </button>
+const SectionItem = ({ section, isExpanded, onToggle, onClose, progress }) => {
+  const { isLessonCompleted } = useLearning();
 
-    {isExpanded && (
-      <div className="section-topics">
-        {section.topics.map((topic) => (
-          <Link
-            key={topic.id}
-            to={`/learn/${section.id}/${topic.id}`}
-            className="topic-link"
-            onClick={onClose}
-          >
-            <span>{topic.title}</span>
-          </Link>
-        ))}
-      </div>
-    )}
-  </div>
-);
+  return (
+    <div className="section-item">
+      <button
+        className={`section-button ${isExpanded ? 'active' : ''}`}
+        onClick={onToggle}
+      >
+        <div className="section-header">
+          <span className="section-icon">{section.icon}</span>
+          <span className="section-name">{section.title}</span>
+        </div>
+        <div className="section-progress">{progress}%</div>
+      </button>
+
+      {isExpanded && (
+        <div className="section-topics">
+          {section.topics.map((topic) => {
+            const completed = isLessonCompleted(topic.id);
+            return (
+              <Link
+                key={topic.id}
+                to={`/learn/${section.id}/${topic.id}`}
+                className={`topic-link ${completed ? 'completed' : ''}`}
+                onClick={onClose}
+              >
+                <span className="topic-indicator">
+                  {completed ? <FiCheckCircle className="completed-icon" /> : <span className="dot" />}
+                </span>
+                <span className="topic-title">{topic.title}</span>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default Sidebar;
